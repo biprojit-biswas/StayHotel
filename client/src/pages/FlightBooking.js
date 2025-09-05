@@ -1,327 +1,129 @@
-// // client/src/pages/FlightBooking.js
-// import React, { useState } from 'react';
-// import axios from 'axios';
-// import { useNavigate } from 'react-router-dom';
-// import '../App.css';
-
-// const FlightBooking = () => {
-//   const [formData, setFormData] = useState({
-//     from: '',
-//     to: '',
-//     departureDate: '',
-//     returnDate: '',
-//     passengers: 1,
-//     bookingClass: 'Economy',
-//   });
-//   const [isRoundTrip, setIsRoundTrip] = useState(true);
-//   const [message, setMessage] = useState('');
-//   const navigate = useNavigate();
-
-//   const handleInputChange = (e) => {
-//     const { name, value } = e.target;
-//     setFormData(prev => ({ ...prev, [name]: value }));
-//   };
-
-//   const handleBooking = async (e) => {
-//     e.preventDefault();
-//     const token = localStorage.getItem('token');
-//     if (!token) {
-//       setMessage('You must be logged in to book a flight.');
-//       return;
-//     }
-    
-//     try {
-//       const bookingData = { ...formData, passengers: Number(formData.passengers) };
-//       await axios.post('http://localhost:5000/api/flight-bookings', bookingData, {
-//         headers: { 'x-auth-token': token },
-//       });
-//       setMessage('Flight booking successful!');
-//       setTimeout(() => navigate('/home'), 2000);
-//     } catch (err) {
-//       setMessage(err.response?.data.msg || 'Failed to book flight.');
-//     }
-//   };
-
-//   return (
-//     <div className="flight-booking-container">
-//       <div className="flight-booking-card card">
-//         <h2 className="text-center">Search & Book Flights</h2>
-//         <div className="trip-type-options">
-//           <button className={`trip-type-btn ${isRoundTrip ? 'active' : ''}`} onClick={() => setIsRoundTrip(true)}>Round Trip</button>
-//           <button className={`trip-type-btn ${!isRoundTrip ? 'active' : ''}`} onClick={() => setIsRoundTrip(false)}>One Way</button>
-//         </div>
-//         <form onSubmit={handleBooking}>
-//           <div className="form-group">
-//             <label>From</label>
-//             <input type="text" name="from" placeholder="City or Airport" value={formData.from} onChange={handleInputChange} required />
-//           </div>
-//           <div className="form-group">
-//             <label>To</label>
-//             <input type="text" name="to" placeholder="City or Airport" value={formData.to} onChange={handleInputChange} required />
-//           </div>
-//           <div className="form-group">
-//             <label>Departure Date</label>
-//             <input type="date" name="departureDate" value={formData.departureDate} onChange={handleInputChange} required />
-//           </div>
-//           {isRoundTrip && (
-//             <div className="form-group">
-//               <label>Return Date</label>
-//               <input type="date" name="returnDate" value={formData.returnDate} onChange={handleInputChange} required />
-//             </div>
-//           )}
-//           <div className="form-group">
-//             <label>Passengers</label>
-//             <input type="number" name="passengers" value={formData.passengers} onChange={handleInputChange} min="1" required />
-//           </div>
-//           <div className="form-group">
-//             <label>Class</label>
-//             <select name="bookingClass" value={formData.bookingClass} onChange={handleInputChange}>
-//               <option>Economy</option>
-//               <option>Business</option>
-//               <option>First Class</option>
-//             </select>
-//           </div>
-//           <button type="submit" className="btn btn-primary">Search Flights</button>
-//         </form>
-//         {message && <p className="text-center" style={{ marginTop: '20px' }}>{message}</p>}
-//       </div>
-//     </div>
-//   );
-// };
-
-// export default FlightBooking;
-
-
-// // client/src/pages/FlightBooking.js
-// import React, { useState, useEffect } from 'react';
-// import axios from 'axios';
-// import { useNavigate } from 'react-router-dom';
-// import '../App.css';
-
-// const FlightBooking = () => {
-//   const [formData, setFormData] = useState({
-//     from: '',
-//     to: '',
-//     departureDate: '',
-//     returnDate: '',
-//     passengers: 1,
-//     bookingClass: 'Economy',
-//   });
-//   const [isRoundTrip, setIsRoundTrip] = useState(true);
-//   const [totalPrice, setTotalPrice] = useState(0);
-//   const [message, setMessage] = useState('');
-//   const navigate = useNavigate();
-
-//   const flightPrices = {
-//     Economy: 10000,
-//     Business: 25000,
-//     'First Class': 50000,
-//   };
-
-//   const handleInputChange = (e) => {
-//     const { name, value } = e.target;
-//     setFormData(prev => ({ ...prev, [name]: value }));
-//   };
-
-//   const calculateTotalPrice = () => {
-//     const pricePerPassenger = flightPrices[formData.bookingClass];
-//     let calculatedPrice = pricePerPassenger * formData.passengers;
-//     if (isRoundTrip) {
-//       calculatedPrice *= 2;
-//     }
-//     setTotalPrice(calculatedPrice);
-//   };
-
-//   useEffect(() => {
-//     calculateTotalPrice();
-//   }, [formData, isRoundTrip]);
-
-//   const handleBooking = async (e) => {
-//     e.preventDefault();
-//     const token = localStorage.getItem('token');
-//     if (!token) {
-//       setMessage('You must be logged in to book a flight.');
-//       return;
-//     }
-    
-//     try {
-//       const bookingData = { ...formData, passengers: Number(formData.passengers), totalPrice: totalPrice };
-//       await axios.post('http://localhost:5000/api/flight-bookings', bookingData, {
-//         headers: { 'x-auth-token': token },
-//       });
-//       setMessage('Flight booking successful!');
-//       setTimeout(() => navigate('/home'), 2000);
-//     } catch (err) {
-//       setMessage(err.response?.data.msg || 'Failed to book flight.');
-//     }
-//   };
-
-//   return (
-//     <div className="flight-booking-container">
-//       <div className="flight-booking-card card">
-//         <h2 className="text-center">Search & Book Flights</h2>
-//         <div className="trip-type-options">
-//           <button type="button" className={`trip-type-btn ${isRoundTrip ? 'active' : ''}`} onClick={() => setIsRoundTrip(true)}>Round Trip</button>
-//           <button type="button" className={`trip-type-btn ${!isRoundTrip ? 'active' : ''}`} onClick={() => setIsRoundTrip(false)}>One Way</button>
-//         </div>
-//         <form onSubmit={handleBooking}>
-//           <div className="form-group">
-//             <label>From</label>
-//             <input type="text" name="from" placeholder="City or Airport" value={formData.from} onChange={handleInputChange} required />
-//           </div>
-//           <div className="form-group">
-//             <label>To</label>
-//             <input type="text" name="to" placeholder="City or Airport" value={formData.to} onChange={handleInputChange} required />
-//           </div>
-//           <div className="form-group">
-//             <label>Departure Date</label>
-//             <input type="date" name="departureDate" value={formData.departureDate} onChange={handleInputChange} required />
-//           </div>
-//           {isRoundTrip && (
-//             <div className="form-group">
-//               <label>Return Date</label>
-//               <input type="date" name="returnDate" value={formData.returnDate} onChange={handleInputChange} required />
-//             </div>
-//           )}
-//           <div className="form-group">
-//             <label>Passengers</label>
-//             <input type="number" name="passengers" value={formData.passengers} onChange={handleInputChange} min="1" required />
-//           </div>
-//           <div className="form-group">
-//             <label>Class</label>
-//             <select name="bookingClass" value={formData.bookingClass} onChange={handleInputChange}>
-//               <option>Economy</option>
-//               <option>Business</option>
-//               <option>First Class</option>
-//             </select>
-//           </div>
-//           <div className="price-display">
-//             <p><strong>Estimated Total:</strong> BDT {totalPrice}</p>
-//           </div>
-//           <button type="submit" className="btn btn-primary">Search Flights</button>
-//         </form>
-//         {message && <p className="text-center" style={{ marginTop: '20px' }}>{message}</p>}
-//       </div>
-//     </div>
-//   );
-// };
-
-// export default FlightBooking;
-
-
-
 // client/src/pages/FlightBooking.js
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
 import '../App.css';
 
 const FlightBooking = () => {
-  const [formData, setFormData] = useState({
-    from: '',
-    to: '',
-    departureDate: '',
-    returnDate: '',
-    passengers: 1,
-    bookingClass: 'Economy',
-  });
-  const [isRoundTrip, setIsRoundTrip] = useState(true);
-  const [totalPrice, setTotalPrice] = useState(0);
-  const [message, setMessage] = useState('');
-  const navigate = useNavigate();
+    const [isRoundTrip, setIsRoundTrip] = useState(true);
+    const [formData, setFormData] = useState({
+        from: '',
+        to: '',
+        departureDate: '',
+        returnDate: '',
+        passengers: 1,
+        class: 'Economy',
+    });
+    const [message, setMessage] = useState('');
+    const navigate = useNavigate();
 
-  const flightPrices = {
-    Economy: 10000,
-    Business: 25000,
-    'First Class': 50000,
-  };
+    const handleChange = (e) => {
+        const { name, value } = e.target;
+        setFormData({ ...formData, [name]: value });
+    };
 
-  const handleInputChange = (e) => {
-    const { name, value } = e.target;
-    setFormData(prev => ({ ...prev, [name]: value }));
-  };
+    const calculateFlightPrice = () => {
+        let basePrice = 5000; // Base price for a one-way flight
+        let classMultiplier = 1;
+        if (formData.class === 'Business') classMultiplier = 2;
+        if (formData.class === 'First Class') classMultiplier = 3;
 
-  const calculateTotalPrice = () => {
-    const pricePerPassenger = flightPrices[formData.bookingClass];
-    let calculatedPrice = pricePerPassenger * formData.passengers;
-    if (isRoundTrip) {
-      calculatedPrice *= 2;
-    }
-    setTotalPrice(calculatedPrice);
-  };
+        let passengersCost = formData.passengers * basePrice * classMultiplier;
+        let total = passengersCost;
+        if (isRoundTrip) {
+            total *= 2;
+        }
 
-  useEffect(() => {
-    calculateTotalPrice();
-  }, [formData, isRoundTrip]);
+        return total;
+    };
 
-  const handleBooking = async (e) => {
-    e.preventDefault();
-    const token = localStorage.getItem('token');
-    if (!token) {
-      setMessage('You must be logged in to book a flight.');
-      return;
-    }
-    
-    try {
-      const bookingData = { ...formData, passengers: Number(formData.passengers), totalPrice: totalPrice };
-      await axios.post('http://localhost:5000/api/flight-bookings', bookingData, {
-        headers: { 'x-auth-token': token },
-      });
-      setMessage('Flight booking successful!');
-      setTimeout(() => navigate('/home'), 2000);
-    } catch (err) {
-      setMessage(err.response?.data.msg || 'Failed to book flight.');
-    }
-  };
+    const handleSearch = async (e) => {
+        e.preventDefault();
+        setMessage('Booking flight...');
+        const token = localStorage.getItem('token');
+        if (!token) {
+            setMessage('You must be logged in to book a flight.');
+            return;
+        }
 
-  return (
-    <div className="flight-booking-container">
-      <div className="flight-booking-card card">
-        <h2 className="text-center">Search & Book Flights</h2>
-        <div className="trip-type-selector">
-          <button type="button" className={`selector-btn ${isRoundTrip ? 'active' : ''}`} onClick={() => setIsRoundTrip(true)}>Round Trip</button>
-          <button type="button" className={`selector-btn ${!isRoundTrip ? 'active' : ''}`} onClick={() => setIsRoundTrip(false)}>One Way</button>
-        </div>
-        <form onSubmit={handleBooking}>
-          <div className="form-group">
-            <label>From</label>
-            <input type="text" name="from" placeholder="City or Airport" value={formData.from} onChange={handleInputChange} required />
-          </div>
-          <div className="form-group">
-            <label>To</label>
-            <input type="text" name="to" placeholder="City or Airport" value={formData.to} onChange={handleInputChange} required />
-          </div>
-          <div className="form-group">
-            <label>Departure Date</label>
-            <input type="date" name="departureDate" value={formData.departureDate} onChange={handleInputChange} required />
-          </div>
-          {isRoundTrip && (
-            <div className="form-group">
-              <label>Return Date</label>
-              <input type="date" name="returnDate" value={formData.returnDate} onChange={handleInputChange} required />
+        try {
+            const totalPrice = calculateFlightPrice();
+            const bookingData = {
+                ...formData,
+                totalPrice,
+                class: formData.class,
+                returnDate: isRoundTrip ? formData.returnDate : null,
+            };
+
+            await axios.post('http://localhost:5000/api/flight-bookings', bookingData, {
+                headers: { 'x-auth-token': token },
+            });
+
+            setMessage('Flight booked successfully! Redirecting to your bookings...');
+            setTimeout(() => {
+                navigate('/mybookings');
+            }, 2000);
+        } catch (err) {
+            setMessage(err.response?.data.msg || 'Failed to book flight. Please try again.');
+        }
+    };
+
+    return (
+        <div className="container" style={{ paddingTop: '50px' }}>
+            <div className="flight-booking-card card">
+                <h2 className="text-center">Search & Book Flights</h2>
+                <div className="trip-type-selector">
+                    <button
+                        className={`trip-btn ${isRoundTrip ? 'active' : ''}`}
+                        onClick={() => setIsRoundTrip(true)}
+                    >
+                        Round Trip
+                    </button>
+                    <button
+                        className={`trip-btn ${!isRoundTrip ? 'active' : ''}`}
+                        onClick={() => setIsRoundTrip(false)}
+                    >
+                        One Way
+                    </button>
+                </div>
+                <form onSubmit={handleSearch}>
+                    <div className="form-group">
+                        <label htmlFor="from">From</label>
+                        <input type="text" name="from" value={formData.from} onChange={handleChange} placeholder="City or Airport" required />
+                    </div>
+                    <div className="form-group">
+                        <label htmlFor="to">To</label>
+                        <input type="text" name="to" value={formData.to} onChange={handleChange} placeholder="City or Airport" required />
+                    </div>
+                    <div className="form-group">
+                        <label htmlFor="departureDate">Departure Date</label>
+                        <input type="date" name="departureDate" value={formData.departureDate} onChange={handleChange} required />
+                    </div>
+                    {isRoundTrip && (
+                        <div className="form-group">
+                            <label htmlFor="returnDate">Return Date</label>
+                            <input type="date" name="returnDate" value={formData.returnDate} onChange={handleChange} required />
+                        </div>
+                    )}
+                    <div className="form-group">
+                        <label htmlFor="passengers">Passengers</label>
+                        <input type="number" name="passengers" value={formData.passengers} onChange={handleChange} min="1" required />
+                    </div>
+                    <div className="form-group">
+                        <label htmlFor="class">Class</label>
+                        <select name="class" value={formData.class} onChange={handleChange} required>
+                            <option value="Economy">Economy</option>
+                            <option value="Business">Business</option>
+                            <option value="First Class">First Class</option>
+                        </select>
+                    </div>
+                    <p className="text-center"><strong>Estimated Total:</strong> BDT {calculateFlightPrice()}</p>
+                    <button type="submit" className="btn btn-primary search-flights-btn">Search & Book Flights</button>
+                </form>
+                {message && <p className="text-center message">{message}</p>}
             </div>
-          )}
-          <div className="form-group">
-            <label>Passengers</label>
-            <input type="number" name="passengers" value={formData.passengers} onChange={handleInputChange} min="1" required />
-          </div>
-          <div className="form-group">
-            <label>Class</label>
-            <select name="bookingClass" value={formData.bookingClass} onChange={handleInputChange}>
-              <option>Economy</option>
-              <option>Business</option>
-              <option>First Class</option>
-            </select>
-          </div>
-          <div className="price-display">
-            <p><strong>Estimated Total:</strong> BDT {totalPrice}</p>
-          </div>
-          <button type="submit" className="btn btn-primary">Search Flights</button>
-        </form>
-        {message && <p className="text-center" style={{ marginTop: '20px' }}>{message}</p>}
-      </div>
-    </div>
-  );
+        </div>
+    );
 };
 
 export default FlightBooking;

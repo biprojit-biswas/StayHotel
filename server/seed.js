@@ -1,7 +1,10 @@
+
 // server/seed.js
 require('dotenv').config();
 const mongoose = require('mongoose');
 const Room = require('./models/Room');
+const User = require('./models/User');
+const bcrypt = require('bcryptjs');
 
 const roomData = [
   {
@@ -131,10 +134,26 @@ const seedDB = async () => {
   try {
     await mongoose.connect(process.env.MONGO_URI);
     console.log('MongoDB connected for seeding.');
+    
+    // Clear existing data
     await Room.deleteMany({});
-    console.log('Existing rooms deleted.');
+    await User.deleteMany({});
+    console.log('Existing data deleted.');
+
+    // Add a new admin user
+    const hashedPassword = await bcrypt.hash('admin123', 10);
+    const adminUser = new User({
+        username: 'admin',
+        email: 'admin@stayhotel.com',
+        password: hashedPassword,
+        role: 'admin'
+    });
+    await adminUser.save();
+    console.log('Admin user created.');
+
+    // Insert room data
     await Room.insertMany(roomData);
-    console.log('Database seeded successfully with a total of 12 rooms! 🏨');
+    console.log('Database seeded successfully with 12 rooms! 🏨');
   } catch (error) {
     console.error('Error seeding database:', error);
   } finally {
