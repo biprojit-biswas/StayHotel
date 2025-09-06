@@ -6,7 +6,7 @@ import HotelInfo from './pages/HotelInfo';
 import Transportation from './pages/Transportation';
 import PrivateTransferForm from './pages/PrivateTransferForm';
 import BicycleRentals from './pages/BicycleRentals';
-import FlightBooking from './pages/FlightBooking'; // Import the new component
+import FlightBooking from './pages/FlightBooking';
 import Auth from './components/Auth';
 import AddRoom from './components/AddRoom';
 import RoomList from './components/RoomList';
@@ -14,7 +14,7 @@ import BookingForm from './components/BookingForm';
 import MyBookings from './components/MyBookings';
 import AdminDashboard from './pages/AdminDashboard';
 import StaffDashboard from './pages/StaffDashboard';
-import './App.css'; 
+import './App.css';
 
 function App() {
   const [isAuthenticated, setIsAuthenticated] = useState(!!localStorage.getItem('token'));
