@@ -12,4 +12,3 @@ const privateTransferSchema = new mongoose.Schema({
 });
 
 module.exports = mongoose.model('PrivateTransfer', privateTransferSchema);
-

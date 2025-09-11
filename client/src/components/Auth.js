@@ -96,3 +96,13 @@ const Auth = ({ setIsAuthenticated }) => {
 };
 
 export default Auth;
+
+
+
+
+
+
+
+
+
+
