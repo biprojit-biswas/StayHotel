@@ -3497,4 +3497,152 @@ body {
   .content-grid {
     grid-template-columns: 1fr;
   }
+  /* ========================================= */
+/* ====== Manage Staff Page Styling ====== */
+/* ========================================= */
+
+.manage-staff-container {
+  padding: 2rem;
+  max-width: 1200px;
+  margin: 2rem auto;
+  background-color: #f9fafb;
+  border-radius: 8px;
 }
+
+.staff-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 2rem;
+  padding-bottom: 1rem;
+  border-bottom: 1px solid #e5e7eb;
+}
+
+.staff-header h2 {
+  font-size: 1.75rem;
+  color: #111827;
+}
+
+.btn-add-staff {
+  background-color: #007bff;
+  color: white;
+  padding: 0.6rem 1.2rem;
+  border-radius: 6px;
+  text-decoration: none;
+  font-weight: 500;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  transition: background-color 0.2s;
+}
+
+.btn-add-staff:hover {
+  background-color: #0056b3;
+}
+
+.users-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+  gap: 1.5rem;
+}
+
+.user-card {
+  background-color: #ffffff;
+  border: 1px solid #e5e7eb;
+  border-radius: 8px;
+  padding: 1.5rem;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
+  transition: box-shadow 0.2s, transform 0.2s;
+}
+
+.user-card:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+.user-card-details h4 {
+  margin: 0 0 0.25rem 0;
+  font-size: 1.1rem;
+  color: #111827;
+}
+
+.user-card-details p {
+  margin: 0;
+  color: #6b7280;
+  font-size: 0.9rem;
+}
+
+.user-card-role {
+  margin: 1rem 0;
+}
+
+.role-badge {
+  display: inline-block;
+  padding: 0.25rem 0.75rem;
+  border-radius: 9999px;
+  font-size: 0.75rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.role-badge.admin {
+  background-color: #fee2e2;
+  color: #b91c1c;
+}
+
+.role-badge.staff {
+  background-color: #dbeafe;
+  color: #1e40af;
+}
+
+.role-badge.user {
+  background-color: #e5e7eb;
+  color: #4b5563;
+}
+
+.role-select {
+  width: 100%;
+  padding: 0.5rem;
+  border-radius: 4px;
+  border: 1px solid #d1d5db;
+}
+
+.user-card-actions {
+  display: flex;
+  gap: 0.5rem;
+  border-top: 1px solid #e5e7eb;
+  padding-top: 1rem;
+  margin-top: 1rem;
+}
+
+.action-btn {
+  border: none;
+  padding: 0.5rem 1rem;
+  border-radius: 4px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: background-color 0.2s, color 0.2s;
+}
+
+.action-btn.edit, .action-btn.save {
+  background-color: #3b82f6;
+  color: white;
+}
+.action-btn.edit:hover, .action-btn.save:hover {
+  background-color: #2563eb;
+}
+
+.action-btn.delete, .action-btn.cancel {
+  background-color: #f3f4f6;
+  color: #374151;
+  border: 1px solid #d1d5db;
+}
+.action-btn.delete:hover, .action-btn.cancel:hover {
+  background-color: #e5e7eb;
+}
+}
+
