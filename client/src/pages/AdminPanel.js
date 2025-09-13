@@ -1047,28 +1047,32 @@ const AdminPanel = ({ handleLogout }) => {
     }
   };
 
-  const handleAddStaff = async (e) => {
+// Corrected code for handleAddStaff
+const handleAddStaff = async (e) => {
     e.preventDefault();
     const formData = new FormData(e.target);
     const newStaffData = {
+      username: formData.get("username"),
       email: formData.get("email"),
-      role: formData.get("role"),
+      password: formData.get("password"),
     };
     try {
-      // FIX: Use the 'token' key
       const token = localStorage.getItem("token");
       await axios.post(`${API_BASE_URL}/admin/staff/add`, newStaffData, {
         headers: { "x-auth-token": token },
       });
-      const response = await axios.get(`${API_BASE_URL}/users`);
+      // Refresh the user list after successfully adding a new user
+      const response = await axios.get(`${API_BASE_URL}/users`, {
+         headers: { "x-auth-token": token },
+      });
       setStaffAndUsers(response.data);
-      e.target.reset();
+      e.target.reset(); // Clear the form
+      setError(null); // Clear any previous errors
     } catch (err) {
       setError("Failed to add staff.");
       console.error("Error adding staff:", err);
     }
   };
-
   const handleUpdateRole = async (userId, newRole) => {
     try {
       // FIX: Use the 'token' key
@@ -1243,7 +1247,7 @@ const AdminPanel = ({ handleLogout }) => {
     </div>
   );
 
-  const renderManageStaffAndUsers = () => (
+const renderManageStaffAndUsers = () => (
     <div className="admin-content-section">
       <button className="back-btn" onClick={() => setCurrentView("dashboard")}>
         &larr; Back to Dashboard
@@ -1257,10 +1261,25 @@ const AdminPanel = ({ handleLogout }) => {
             <FaPlus /> Add New Staff
           </h3>
           <form onSubmit={handleAddStaff}>
+            {/* NEW: Username Field */}
+            <div className="form-group">
+              <label htmlFor="username">Username</label>
+              <input type="text" id="username" name="username" required />
+            </div>
+
             <div className="form-group">
               <label htmlFor="email">Staff Email</label>
               <input type="email" id="email" name="email" required />
             </div>
+
+            {/* NEW: Password Field */}
+            <div className="form-group">
+              <label htmlFor="password">Password</label>
+              <input type="password" id="password" name="password" required />
+            </div>
+
+            {/* The 'role' is now hardcoded to 'staff' on the backend, so this is not needed */}
+            {/*
             <div className="form-group">
               <label htmlFor="role">Role</label>
               <select id="role" name="role">
@@ -1269,6 +1288,7 @@ const AdminPanel = ({ handleLogout }) => {
                 <option value="user">User</option>
               </select>
             </div>
+            */}
             <button type="submit" className="btn btn-primary">
               Add Staff
             </button>
@@ -1284,7 +1304,7 @@ const AdminPanel = ({ handleLogout }) => {
               staffAndUsers.map((user) => (
                 <li key={user._id} className="list-item user-item">
                   <div className="user-info">
-                    <span className="user-email">{user.email || "User"}</span>
+                    <span className="user-email">{user.username} ({user.email})</span>
                     <span className={`user-role ${user.role}`}>
                       {user.role}
                     </span>
@@ -1312,7 +1332,7 @@ const AdminPanel = ({ handleLogout }) => {
               ))
             ) : (
               <p className="no-items">
-                No staff or users found. Add a new one!
+                No staff or users found.
               </p>
             )}
           </ul>
@@ -1320,7 +1340,6 @@ const AdminPanel = ({ handleLogout }) => {
       </div>
     </div>
   );
-
   const renderViewFeedback = () => (
     <div className="admin-content-section">
       <button className="back-btn" onClick={() => setCurrentView("dashboard")}>
